@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      DATABASE_URL: postgres://user:password@db:5432/mydatabase
+      REDIS_URL: redis://redis:6379
+      STRIPE_SECRET_KEY: your_stripe_secret_key
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydatabase
+    ports:
+      - '5432:5432'
+
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - '6379:6379'
